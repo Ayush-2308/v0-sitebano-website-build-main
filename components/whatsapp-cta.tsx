@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { SITEBANO_CONTACT } from "@/lib/sitebano-assets"
 import { cn } from "@/lib/utils"
 
-function WhatsAppIcon({ className }: { className?: string }) {
+export function WhatsAppIcon({ className }: { className?: string }) {
   return (
     <svg
       className={className}

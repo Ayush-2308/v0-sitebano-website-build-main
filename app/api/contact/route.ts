@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server"
 import nodemailer from "nodemailer"
 
-const OWNER_EMAIL = "ayush.ag@gmail.com"
+const OWNER_EMAIL = "ayush.ag2308@gmail.com"
 
 export type ContactFormPayload = {
   fullName: string
@@ -80,10 +80,10 @@ export async function POST(request: Request) {
     if (!transporter) {
       return NextResponse.json(
         {
-          error:
-            "Email service is not configured. Set SMTP_USER and SMTP_PASS in environment variables.",
+          success: false,
+          fallback: "whatsapp",
         },
-        { status: 503 }
+        { status: 200 }
       )
     }
 

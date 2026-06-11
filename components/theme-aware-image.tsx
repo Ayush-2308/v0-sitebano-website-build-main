@@ -1,13 +1,11 @@
 "use client"
 
 import Image from "next/image"
-import { useTheme } from "next-themes"
-import { useEffect, useState } from "react"
 import { cn } from "@/lib/utils"
 import { SITEBANO_ASSETS } from "@/lib/sitebano-assets"
 
 const LOGO_SIZES = {
-  nav: "h-11 sm:h-12 lg:h-14",
+  nav: "h-16 sm:h-20 lg:h-24",
   footer: "h-12 sm:h-14 lg:h-16",
   hero: "h-32 sm:h-36 md:h-40 lg:h-48",
 } as const
@@ -17,6 +15,7 @@ type LogoVariant = keyof typeof LOGO_SIZES
 type ThemeAwareLogoProps = {
   variant?: LogoVariant
   className?: string
+  imageClassName?: string
   priority?: boolean
 }
 
@@ -24,21 +23,15 @@ type ThemeAwareLogoProps = {
 export function ThemeAwareLogo({
   variant = "nav",
   className,
+  imageClassName,
   priority = false,
 }: ThemeAwareLogoProps) {
-  const { resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const isDark = mounted && resolvedTheme === "dark"
   const sizeClass = LOGO_SIZES[variant]
 
   const layerClass = cn(
     "h-full w-auto max-w-none object-contain object-left",
-    "transition-opacity duration-300 ease-in-out"
+    "transition-[opacity,transform] duration-300 ease-in-out",
+    imageClassName
   )
 
   return (
@@ -50,44 +43,22 @@ export function ThemeAwareLogo({
       )}
       aria-label="SiteBano"
     >
-      {/* Spacer sets stable width/height from logo artwork */}
       <Image
         src={SITEBANO_ASSETS.logo.light}
-        alt=""
+        alt="SiteBano"
         width={400}
         height={120}
         priority={priority}
-        aria-hidden
-        className={cn("h-full w-auto opacity-0 pointer-events-none select-none", sizeClass)}
+        className={cn(layerClass, "opacity-100 dark:opacity-0")}
       />
-      {mounted ? (
-        <>
-          <Image
-            src={SITEBANO_ASSETS.logo.light}
-            alt="SiteBano"
-            width={400}
-            height={120}
-            priority={priority}
-            className={cn(
-              "absolute left-0 top-0",
-              layerClass,
-              isDark ? "opacity-0" : "opacity-100"
-            )}
-          />
-          <Image
-            src={SITEBANO_ASSETS.logo.dark}
-            alt="SiteBano"
-            width={400}
-            height={120}
-            priority={priority}
-            className={cn(
-              "absolute left-0 top-0",
-              layerClass,
-              isDark ? "opacity-100" : "opacity-0"
-            )}
-          />
-        </>
-      ) : null}
+      <Image
+        src={SITEBANO_ASSETS.logo.dark}
+        alt="SiteBano"
+        width={400}
+        height={120}
+        priority={priority}
+        className={cn("absolute left-0 top-0 opacity-0 dark:opacity-100", layerClass)}
+      />
     </span>
   )
 }
@@ -102,15 +73,6 @@ export function ThemeAwareProfile({
   className,
   priority = false,
 }: ThemeAwareProfileProps) {
-  const { resolvedTheme } = useTheme()
-  const [mounted, setMounted] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  const isDark = mounted && resolvedTheme === "dark"
-
   const layerClass = cn(
     "w-full h-auto max-w-full object-contain object-center",
     "transition-opacity duration-300 ease-in-out",
@@ -119,32 +81,22 @@ export function ThemeAwareProfile({
 
   return (
     <div className="relative w-full">
-      {!mounted ? (
-        <div className="w-full aspect-video animate-pulse bg-muted/20 rounded-2xl" />
-      ) : (
-        <>
-          <Image
-            src={SITEBANO_ASSETS.profile.light}
-            alt="Ayush Gupta - Founder & Developer at SiteBano"
-            width={1600}
-            height={900}
-            priority={priority}
-            className={cn(layerClass, isDark ? "opacity-0" : "opacity-100")}
-          />
-          <Image
-            src={SITEBANO_ASSETS.profile.dark}
-            alt="Ayush Gupta - Founder & Developer at SiteBano"
-            width={1600}
-            height={900}
-            priority={priority}
-            className={cn(
-              "absolute left-0 top-0 w-full",
-              layerClass,
-              isDark ? "opacity-100" : "opacity-0"
-            )}
-          />
-        </>
-      )}
+      <Image
+        src={SITEBANO_ASSETS.profile.light}
+        alt="Ayush Gupta - Founder & Developer at SiteBano"
+        width={1600}
+        height={900}
+        priority={priority}
+        className={cn(layerClass, "opacity-100 dark:opacity-0")}
+      />
+      <Image
+        src={SITEBANO_ASSETS.profile.dark}
+        alt="Ayush Gupta - Founder & Developer at SiteBano"
+        width={1600}
+        height={900}
+        priority={priority}
+        className={cn("absolute left-0 top-0 w-full opacity-0 dark:opacity-100", layerClass)}
+      />
     </div>
   )
 }

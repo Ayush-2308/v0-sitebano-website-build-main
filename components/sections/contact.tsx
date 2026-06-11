@@ -16,12 +16,17 @@ import {
 } from "@/components/ui/select"
 import { SITEBANO_CONTACT } from "@/lib/sitebano-assets"
 import { WhatsAppCTA } from "@/components/whatsapp-cta"
+import { ThemeAwareLogo } from "@/components/theme-aware-image"
 
 const businessTypes = [
+  "Grocery Store",
   "Restaurant / Cafe",
   "Salon / Spa",
   "Gym / Fitness",
   "Clinic / Healthcare",
+  "Real Estate",
+  "Coaching Institute",
+  "Hotel & Guest House",
   "Retail / Shop",
   "Professional Services",
   "Other",
@@ -63,6 +68,7 @@ export function ContactSection() {
   const [form, setForm] = useState<FormState>(initialForm)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
+  const [usedWhatsAppFallback, setUsedWhatsAppFallback] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
   const update = (field: keyof FormState, value: string) => {
@@ -87,6 +93,28 @@ export function ContactSection() {
         throw new Error(data.error || "Submission failed")
       }
 
+      if (data.fallback === "whatsapp") {
+        const whatsappMessage = [
+          "Hi Ayush, I want to request a free SiteBano consultation.",
+          "",
+          `Full Name: ${form.fullName}`,
+          `Business Name: ${form.businessName}`,
+          `Phone: ${form.phone}`,
+          `Email: ${form.email}`,
+          `Business Type: ${form.businessType}`,
+          `Project Requirements: ${form.projectRequirements}`,
+          `Budget: ${form.budget}`,
+          "",
+          `Message: ${form.message}`,
+        ].join("\n")
+
+        window.location.href = `${SITEBANO_CONTACT.whatsappUrl.split("?")[0]}?text=${encodeURIComponent(whatsappMessage)}`
+        setUsedWhatsAppFallback(true)
+        setIsSuccess(true)
+        return
+      }
+
+      setUsedWhatsAppFallback(false)
       setIsSuccess(true)
       setForm(initialForm)
     } catch (err) {
@@ -97,18 +125,18 @@ export function ContactSection() {
   }
 
   return (
-    <section id="contact" className="py-20 lg:py-32 bg-secondary/30" ref={ref}>
+    <section id="contact" className="bg-secondary/30 py-20 text-foreground dark:bg-black dark:text-white lg:py-28" ref={ref}>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={false}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="text-center mb-12 lg:mb-16"
         >
-          <h2 className="text-3xl font-bold text-foreground sm:text-4xl lg:text-5xl text-balance">
+          <h2 className="text-3xl font-black tracking-tight text-foreground dark:text-white sm:text-4xl lg:text-5xl text-balance">
             Let&apos;s Build Your Digital Presence
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
+          <p className="mt-4 text-lg text-muted-foreground dark:text-white/60 max-w-2xl mx-auto text-pretty">
             Ready to grow your business online? Connect with SiteBano today.
           </p>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
@@ -130,13 +158,29 @@ export function ContactSection() {
         <div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
           {/* Contact info */}
           <motion.div
-            initial={{ opacity: 0, x: -20 }}
+            id="contact-form"
+            initial={false}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.1 }}
             className="lg:col-span-2 space-y-6"
           >
-            <div className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-6 glass-card">
-              <h3 className="text-lg font-semibold text-foreground mb-4">
+            <div className="overflow-hidden rounded-2xl border border-primary/25 bg-card/80 shadow-2xl shadow-emerald-500/15 dark:bg-white/[0.04]">
+              <div className="relative">
+                <div className="absolute inset-0 bg-primary/10 blur-3xl" />
+                <div className="relative flex min-h-[260px] items-center justify-center rounded-2xl bg-background/80 p-8 dark:bg-black/70">
+                  <div className="absolute inset-8 rounded-full bg-primary/15 blur-3xl" />
+                  <ThemeAwareLogo
+                    variant="hero"
+                    className="relative h-32 sm:h-36"
+                    imageClassName="scale-[1.38] object-center"
+                    priority
+                  />
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-border bg-card/80 p-6 backdrop-blur-xl dark:border-white/10 dark:bg-white/[0.04]">
+              <h3 className="text-lg font-semibold text-foreground dark:text-white mb-4">
                 Get in touch
               </h3>
               <ul className="space-y-4">
@@ -145,14 +189,14 @@ export function ContactSection() {
                     href={SITEBANO_CONTACT.whatsappUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center gap-3 text-muted-foreground hover:text-[#25D366] transition-colors group"
+                    className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors group dark:text-white/60"
                   >
-                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#25D366]/10 group-hover:bg-[#25D366]/20 transition-colors">
-                      <Phone className="h-4 w-4 text-[#25D366]" />
+                    <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      <Phone className="h-4 w-4 text-primary" />
                     </span>
                     <span>
-                      <span className="block text-xs text-muted-foreground">WhatsApp</span>
-                      <span className="font-medium text-foreground">
+                      <span className="block text-xs text-muted-foreground dark:text-white/45">WhatsApp</span>
+                      <span className="font-medium text-foreground dark:text-white">
                         {SITEBANO_CONTACT.phone}
                       </span>
                     </span>
@@ -161,14 +205,14 @@ export function ContactSection() {
                 <li>
                   <a
                     href={SITEBANO_CONTACT.emailMailto}
-                    className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors group"
+                    className="flex items-center gap-3 text-muted-foreground hover:text-primary transition-colors group dark:text-white/60"
                   >
                     <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
                       <Mail className="h-4 w-4 text-primary" />
                     </span>
                     <span>
-                      <span className="block text-xs text-muted-foreground">Email</span>
-                      <span className="font-medium text-foreground">
+                      <span className="block text-xs text-muted-foreground dark:text-white/45">Email</span>
+                      <span className="font-medium text-foreground dark:text-white">
                         {SITEBANO_CONTACT.email}
                       </span>
                     </span>
@@ -177,8 +221,8 @@ export function ContactSection() {
               </ul>
             </div>
 
-            <p className="text-sm text-muted-foreground leading-relaxed">
-              <span className="text-foreground font-medium">
+            <p className="text-sm text-muted-foreground dark:text-white/55 leading-relaxed">
+              <span className="text-foreground dark:text-white font-medium">
                 Your Customers Are Online.
               </span>{" "}
               <span className="text-primary">Are You?</span>
@@ -187,23 +231,33 @@ export function ContactSection() {
 
           {/* Form */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
+            initial={false}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
             className="lg:col-span-3"
           >
             {isSuccess ? (
-              <div className="rounded-2xl border border-primary/30 bg-card/80 backdrop-blur-xl p-10 text-center glass-card">
+              <div className="rounded-2xl border border-primary/30 bg-card/80 backdrop-blur-xl p-10 text-center shadow-2xl shadow-emerald-500/10 dark:bg-white/[0.04]">
                 <CheckCircle2 className="h-14 w-14 text-primary mx-auto mb-4" />
-                <h3 className="text-xl font-semibold text-foreground mb-2">
-                  Your request has been submitted successfully. Team SiteBano will contact you soon.
+                <h3 className="text-xl font-semibold text-foreground dark:text-white mb-2">
+                  {usedWhatsAppFallback
+                    ? "Your request is ready on WhatsApp."
+                    : "Your request has been submitted successfully. Team SiteBano will contact you soon."}
                 </h3>
-                <p className="text-muted-foreground mb-8">
-                  Prefer a faster response? Chat with us on WhatsApp.
+                <p className="text-muted-foreground dark:text-white/55 mb-8">
+                  {usedWhatsAppFallback
+                    ? "Tap Send in WhatsApp to share your consultation request with SiteBano."
+                    : "Prefer a faster response? Chat with us on WhatsApp."}
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
                   <WhatsAppCTA />
-                  <Button variant="outline" onClick={() => setIsSuccess(false)}>
+                  <Button
+                    variant="outline"
+                    onClick={() => {
+                      setIsSuccess(false)
+                      setUsedWhatsAppFallback(false)
+                    }}
+                  >
                     Submit another inquiry
                   </Button>
                 </div>
@@ -211,7 +265,7 @@ export function ContactSection() {
             ) : (
               <form
                 onSubmit={handleSubmit}
-                className="rounded-2xl border border-border/50 bg-card/60 backdrop-blur-xl p-6 sm:p-8 space-y-5 glass-card"
+                className="rounded-2xl border border-border bg-card/80 backdrop-blur-xl p-6 sm:p-8 space-y-5 shadow-2xl shadow-emerald-500/10 dark:border-white/10 dark:bg-white/[0.04] [&_[data-slot=select-trigger]]:w-full dark:[&_label]:text-white dark:[&_input]:border-white/10 dark:[&_input]:text-white dark:[&_input]:placeholder:text-white/35 dark:[&_textarea]:border-white/10 dark:[&_textarea]:text-white dark:[&_textarea]:placeholder:text-white/35 dark:[&_[data-slot=select-trigger]]:border-white/10 dark:[&_[data-slot=select-trigger]]:text-white"
               >
                 <div className="grid sm:grid-cols-2 gap-5">
                   <div className="space-y-2">

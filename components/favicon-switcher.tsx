@@ -13,21 +13,22 @@ export function FaviconSwitcher() {
         ? SITEBANO_ASSETS.favicon.dark
         : SITEBANO_ASSETS.favicon.light
 
-    const existing = document.querySelector<HTMLLinkElement>(
-      'link[rel="icon"][data-sitebano-theme]'
+    const links = document.querySelectorAll<HTMLLinkElement>(
+      'link[rel="icon"], link[rel="shortcut icon"]'
     )
 
-    if (existing) {
-      existing.href = href
-      return
-    }
+    links.forEach((link) => {
+      link.type = "image/png"
+      link.href = href
+    })
 
-    const link = document.createElement("link")
-    link.rel = "icon"
-    link.type = "image/png"
-    link.href = href
-    link.setAttribute("data-sitebano-theme", "true")
-    document.head.appendChild(link)
+    if (links.length === 0) {
+      const link = document.createElement("link")
+      link.rel = "icon"
+      link.type = "image/png"
+      link.href = href
+      document.head.appendChild(link)
+    }
   }, [resolvedTheme])
 
   return null

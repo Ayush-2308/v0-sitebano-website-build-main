@@ -20,7 +20,7 @@ const packages = [
     headerText: "text-secondary-foreground",
     tagStyle: "bg-secondary border border-border text-muted-foreground",
     buttonStyle: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-    maintenance: "500",
+    maintenance: "700",
     features: [
       { text: "1-page website", included: true },
       { text: "Business name + tagline", included: true },
@@ -49,7 +49,7 @@ const packages = [
     headerText: "text-white",
     tagStyle: "bg-white/20 text-white",
     buttonStyle: "bg-[#FF6B00] text-white hover:bg-[#e55f00]",
-    maintenance: "800",
+    maintenance: "1,000",
     features: [
       { text: "5-page website (Home, Products, About, Reviews, Contact)", included: true },
       { text: "Product categories with grid layout", included: true },
@@ -79,7 +79,7 @@ const packages = [
     headerText: "text-white",
     tagStyle: "bg-white/15 text-white",
     buttonStyle: "bg-[#1B4F8A] text-white hover:bg-[#164070]",
-    maintenance: "1,200",
+    maintenance: "1,500",
     features: [
       { text: "Everything in Standard +", included: true, highlight: true },
       { text: "WhatsApp order form (checkbox selection)", included: true },
@@ -111,6 +111,44 @@ export function PricingSection() {
   const ref = useRef(null)
   const isInView = useInView(ref, { once: true, margin: "-100px" })
   const [showAddOns, setShowAddOns] = useState(false)
+  const [hoveredPlan, setHoveredPlan] = useState<string | null>(null)
+
+  const getPlanMotion = (pkg: (typeof packages)[number]) => {
+    if (!isInView) {
+      return { opacity: 0, y: 30, x: 0, scale: 1, rotateY: 0 }
+    }
+
+    if (!hoveredPlan) {
+      return {
+        opacity: 1,
+        y: 0,
+        x: 0,
+        scale: pkg.popular ? 1.05 : 1,
+        rotateY: 0,
+      }
+    }
+
+    const isHovered = hoveredPlan === pkg.id
+    const sidePush = pkg.id === "basic" ? -18 : pkg.id === "advanced" ? 18 : 0
+
+    if (isHovered) {
+      return {
+        opacity: 1,
+        y: -18,
+        x: sidePush,
+        scale: pkg.popular ? 1.1 : 1.06,
+        rotateY: pkg.id === "basic" ? -3 : pkg.id === "advanced" ? 3 : 0,
+      }
+    }
+
+    return {
+      opacity: 0.62,
+      y: 14,
+      x: pkg.id === "basic" ? -8 : pkg.id === "advanced" ? 8 : 0,
+      scale: 0.94,
+      rotateY: pkg.id === "basic" ? 4 : pkg.id === "advanced" ? -4 : 0,
+    }
+  }
 
   return (
     <section id="pricing" className="py-20 lg:py-32" ref={ref}>
@@ -135,18 +173,28 @@ export function PricingSection() {
         </motion.div>
 
         {/* Pricing Cards */}
-        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8">
+        <div className="grid lg:grid-cols-3 gap-6 lg:gap-8 [perspective:1200px]">
           {packages.map((pkg, index) => (
             <motion.div
               key={pkg.id}
               initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              animate={getPlanMotion(pkg)}
+              transition={{
+                type: hoveredPlan ? "spring" : "tween",
+                stiffness: 240,
+                damping: 22,
+                duration: 0.5,
+                delay: hoveredPlan ? 0 : index * 0.1,
+              }}
+              onMouseEnter={() => setHoveredPlan(pkg.id)}
+              onMouseLeave={() => setHoveredPlan(null)}
               className={cn(
-                "relative rounded-2xl bg-card border overflow-hidden transition-all",
+                "relative rounded-2xl bg-card border overflow-hidden transition-shadow duration-300 transform-gpu will-change-transform cursor-pointer",
                 pkg.popular
                   ? "border-[#FF6B00]/50 shadow-xl scale-[1.02] lg:scale-105"
-                  : "border-border/50 hover:border-border"
+                  : "border-border/50 hover:border-border",
+                hoveredPlan === pkg.id && "z-20 shadow-2xl emerald-glow-strong",
+                hoveredPlan && hoveredPlan !== pkg.id && "z-0"
               )}
             >
               {/* Header */}

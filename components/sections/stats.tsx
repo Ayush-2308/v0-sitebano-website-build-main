@@ -1,17 +1,17 @@
 "use client"
 
-import { motion, useMotionValue, useTransform, animate } from "framer-motion"
+import { motion, useMotionValue, animate } from "framer-motion"
 import { useInView } from "framer-motion"
-import { useRef, useEffect } from "react"
+import { useRef, useEffect, useState } from "react"
 import { Users, Globe, Clock, Star } from "lucide-react"
 
 const stats = [
   {
     icon: Users,
-    value: 50,
+    value: 12,
     suffix: "+",
-    label: "Happy Clients",
-    description: "Local businesses served",
+    label: "Demo Requests",
+    description: "Early business interest",
   },
   {
     icon: Globe,
@@ -22,10 +22,10 @@ const stats = [
   },
   {
     icon: Star,
-    value: 4.9,
+    value: 4.6,
     suffix: "",
-    label: "Client Rating",
-    description: "Average satisfaction",
+    label: "Early Feedback",
+    description: "From demo conversations",
     decimal: true,
   },
   {
@@ -39,25 +39,36 @@ const stats = [
 
 function Counter({ value, decimal = false }: { value: number; decimal?: boolean }) {
   const count = useMotionValue(0)
-  const rounded = useTransform(count, (latest) => 
-    decimal ? latest.toFixed(1) : Math.round(latest)
-  )
+  const [displayValue, setDisplayValue] = useState(decimal ? "0.0" : "0")
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true })
+  const isInView = useInView(ref, { once: false, margin: "-80px" })
 
   useEffect(() => {
+    if (!isInView) {
+      count.set(0)
+      setDisplayValue(decimal ? "0.0" : "0")
+      return
+    }
+
     if (isInView) {
-      const controls = animate(count, value, { duration: 2, ease: "easeOut" })
+      count.set(0)
+      const controls = animate(count, value, {
+        duration: 2,
+        ease: "easeOut",
+        onUpdate: (latest) => {
+          setDisplayValue(decimal ? latest.toFixed(1) : String(Math.round(latest)))
+        },
+      })
       return controls.stop
     }
-  }, [isInView, value, count])
+  }, [isInView, value, count, decimal])
 
-  return <motion.span ref={ref}>{rounded}</motion.span>
+  return <motion.span ref={ref}>{displayValue}</motion.span>
 }
 
 export function StatsSection() {
   const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
+  const isInView = useInView(ref, { once: false, margin: "-100px" })
 
   return (
     <section className="py-20 lg:py-24" ref={ref}>
@@ -66,9 +77,13 @@ export function StatsSection() {
           {stats.map((stat, index) => (
             <motion.div
               key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
+              initial={false}
+              animate={
+                isInView
+                  ? { opacity: 1, y: 0, scale: 1 }
+                  : { opacity: 0, y: 24, scale: 0.96 }
+              }
+              transition={{ duration: 0.5, delay: isInView ? index * 0.1 : 0 }}
               className="relative group"
             >
               <div className="relative p-6 lg:p-8 rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all text-center">

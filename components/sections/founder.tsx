@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
+import Image from "next/image"
 import { useRef } from "react"
 import { ThemeAwareProfile } from "@/components/theme-aware-image"
 import { Quote, Linkedin, Mail } from "lucide-react"
@@ -19,7 +20,7 @@ export function FounderSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           {/* Image Side */}
           <motion.div
-            initial={{ opacity: 0, x: -30 }}
+            initial={false}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6 }}
             className="relative"
@@ -28,7 +29,7 @@ export function FounderSection() {
               {/* Decorative Elements */}
               <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 via-transparent to-teal/20 rounded-3xl blur-2xl pointer-events-none" />
               
-              {/* Full profile image — no crop */}
+              {/* Full profile image - no crop */}
               <div className="relative rounded-2xl border border-border/50 bg-card/80 emerald-glow p-1 sm:p-2">
                 <ThemeAwareProfile priority />
               </div>
@@ -54,7 +55,7 @@ export function FounderSection() {
 
           {/* Content Side */}
           <motion.div
-            initial={{ opacity: 0, x: 30 }}
+            initial={false}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ duration: 0.6, delay: 0.2 }}
           >
@@ -68,29 +69,38 @@ export function FounderSection() {
               Founder & Developer
             </p>
 
-            <div className="space-y-4 text-muted-foreground leading-relaxed">
+            <div className="relative space-y-5 pb-20 text-muted-foreground leading-relaxed">
               <p>
-                I started SiteBano with a simple observation: thousands of local businesses 
-                in Agra have built incredible trust through Google ratings and reviews, 
-                yet they have no website to capture that demand.
+                I started SiteBano to solve one simple problem - great local businesses
+                are trusted on Google, but invisible online.
               </p>
               <p>
-                Every day, potential customers search for these businesses online, 
-                find their amazing 4.5+ star ratings, but then... nothing. No website. 
-                No menu. No way to book or order. They leave and go to a competitor.
+                We help restaurants, grocery stores, salons, gyms and clinics turn that
+                trust into customers through fast, modern digital experiences.
               </p>
-              <p>
-                <span className="text-foreground font-medium">My mission is simple:</span> help every 
-                deserving local business — restaurants, salons, gyms, clinics — build a powerful 
-                digital identity. Fast. Affordable. No technical knowledge required.
-              </p>
+              <div className="pointer-events-none absolute -bottom-4 -right-5 overflow-hidden rounded-xl">
+                <Image
+                  src="/images/signature-dark.png"
+                  alt="Ayush Gupta signature"
+                  width={1792}
+                  height={768}
+                  className="hidden h-auto w-48 -rotate-2 object-contain opacity-90 mix-blend-screen drop-shadow-[0_0_10px_rgba(16,185,129,0.25)] [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_78%)] dark:block sm:w-60"
+                />
+                <Image
+                  src="/images/signature-light.png"
+                  alt="Ayush Gupta signature"
+                  width={1936}
+                  height={768}
+                  className="h-auto w-48 -rotate-2 object-contain opacity-95 mix-blend-multiply drop-shadow-sm [mask-image:radial-gradient(ellipse_at_center,black_58%,transparent_78%)] dark:hidden sm:w-60"
+                />
+              </div>
             </div>
 
             {/* Vision */}
             <div className="mt-8 p-6 rounded-2xl bg-card border border-border/50">
               <h3 className="font-semibold text-foreground mb-2">The Vision</h3>
               <p className="text-sm text-muted-foreground">
-                SiteBano isn&apos;t just a web agency — we&apos;re building a digital growth platform 
+                SiteBano isn&apos;t just a web agency - we&apos;re building a digital growth platform
                 for local businesses. Starting with websites, expanding to apps, automation, 
                 and complete digital transformation solutions.
               </p>

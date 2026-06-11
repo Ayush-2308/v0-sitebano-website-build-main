@@ -9,11 +9,11 @@ import { cn } from "@/lib/utils"
 const faqs = [
   {
     question: "How much does a website cost?",
-    answer: "Our packages start at Rs 2,999 for a basic 1-page website and go up to Rs 9,999 for a full-featured advanced website. Monthly maintenance ranges from Rs 500-1,200/month depending on your package. We also offer add-ons like photo shoots, video, and Google My Business setup."
+    answer: "Our packages start at Rs 2,999 for Basic, Rs 5,499 for Standard, and Rs 9,999 for Advanced. Monthly maintenance is Rs 700/month for Basic, Rs 1,000/month for Standard, and Rs 1,500/month for Advanced. We also offer add-ons like photo shoots, video, and Google My Business setup."
   },
   {
     question: "How long does it take to build my website?",
-    answer: "We deliver fast! Basic websites are ready in 24 hours, Standard in 48 hours, and Advanced in 72 hours. Once you approve the demo and provide your content (photos, menu, details), we start immediately."
+    answer: "We deliver fast. Basic websites are usually ready in 48 hours, Standard in 48-72 hours, and Advanced in around 72 hours. Once you approve the demo and provide your content (photos, menu, details), we start immediately."
   },
   {
     question: "Do I need to pay anything upfront?",
@@ -78,7 +78,7 @@ export function FAQSection() {
       <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
@@ -96,7 +96,7 @@ export function FAQSection() {
 
         {/* FAQ List */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.1 }}
           className="rounded-2xl bg-card border border-border/50 px-6"
@@ -113,7 +113,7 @@ export function FAQSection() {
 
         {/* Contact CTA */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={false}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.5, delay: 0.2 }}
           className="mt-8 text-center"

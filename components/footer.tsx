@@ -3,25 +3,28 @@
 import { useEffect, useState } from "react"
 import { ThemeAwareLogo } from "@/components/theme-aware-image"
 import { SITEBANO_CONTACT } from "@/lib/sitebano-assets"
-import { Mail, Phone, MapPin, Instagram, Linkedin, Twitter } from "lucide-react"
+import { WhatsAppIcon } from "@/components/whatsapp-cta"
+import { Mail, MapPin, Linkedin } from "lucide-react"
+
+const FOUNDER_LINKEDIN = "https://www.linkedin.com/in/ayush-gupta-android/"
 
 const footerLinks = {
   services: [
     { name: "Website Development", href: "#services" },
-    { name: "SEO Optimization", href: "#services" },
-    { name: "Google My Business", href: "#services" },
-    { name: "Social Media", href: "#services" },
+    { name: "SEO Optimization", href: "#pricing" },
+    { name: "Google My Business", href: "#pricing" },
+    { name: "Social Media", href: "#pricing" },
   ],
   company: [
     { name: "About Us", href: "#about" },
-    { name: "Portfolio", href: "#portfolio" },
+    { name: "Industries", href: "#portfolio" },
     { name: "Pricing", href: "#pricing" },
-    { name: "Contact", href: "#contact" },
+    { name: "Contact", href: "#contact-form" },
   ],
   support: [
     { name: "FAQ", href: "#faq" },
-    { name: "Terms of Service", href: "#" },
-    { name: "Privacy Policy", href: "#" },
+    { name: "Terms of Service", href: "/terms" },
+    { name: "Privacy Policy", href: "/privacy" },
   ],
 }
 
@@ -50,31 +53,29 @@ export function Footer() {
               </p>
               <div className="flex gap-4">
                 <a
-                  href="https://instagram.com/sitebano"
+                  href={FOUNDER_LINKEDIN}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
-                  aria-label="Instagram"
-                >
-                  <Instagram className="h-4 w-4" />
-                </a>
-                <a
-                  href="https://linkedin.com/company/sitebano"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
-                  aria-label="LinkedIn"
+                  aria-label="Ayush Gupta on LinkedIn"
                 >
                   <Linkedin className="h-4 w-4" />
                 </a>
                 <a
-                  href="https://twitter.com/sitebano"
+                  href={SITEBANO_CONTACT.emailMailto}
+                  className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
+                  aria-label={`Email ${SITEBANO_CONTACT.email}`}
+                >
+                  <Mail className="h-4 w-4" />
+                </a>
+                <a
+                  href={SITEBANO_CONTACT.whatsappUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex h-10 w-10 items-center justify-center rounded-full bg-secondary text-secondary-foreground hover:bg-primary hover:text-primary-foreground transition-colors"
-                  aria-label="Twitter"
+                  aria-label={`WhatsApp ${SITEBANO_CONTACT.phone}`}
                 >
-                  <Twitter className="h-4 w-4" />
+                  <WhatsAppIcon className="h-4 w-4" />
                 </a>
               </div>
             </div>
@@ -148,7 +149,7 @@ export function Footer() {
                     rel="noopener noreferrer"
                     className="flex items-center gap-3 text-sm text-muted-foreground hover:text-primary transition-colors"
                   >
-                    <Phone className="h-4 w-4 text-primary" />
+                    <WhatsAppIcon className="h-4 w-4 text-primary" />
                     {SITEBANO_CONTACT.phone}
                   </a>
                 </li>
@@ -170,7 +171,7 @@ export function Footer() {
               &copy; {new Date().getFullYear()} SiteBano. All rights reserved.
             </p>
             <p className="text-sm text-muted-foreground">
-              Made with care in Agra, India
+              Made with care in India
             </p>
           </div>
         </div>

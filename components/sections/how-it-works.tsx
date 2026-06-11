@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import { useInView } from "framer-motion"
 import { useRef } from "react"
-import { Search, Palette, Rocket, ArrowRight } from "lucide-react"
+import { Search, Palette, Rocket, ArrowDown, ArrowRight } from "lucide-react"
 
 const steps = [
   {
@@ -60,7 +60,7 @@ export function HowItWorksSection() {
           {/* Connection Line */}
           <div className="absolute top-1/2 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent hidden lg:block -translate-y-1/2" />
 
-          <div className="grid lg:grid-cols-3 gap-8">
+          <div className="grid gap-16 lg:grid-cols-3">
             {steps.map((step, index) => (
               <motion.div
                 key={step.number}
@@ -92,13 +92,21 @@ export function HowItWorksSection() {
 
                   {/* Arrow for desktop */}
                   {index < steps.length - 1 && (
-                    <div className="absolute top-1/2 -right-4 hidden lg:block -translate-y-1/2 z-20">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-full bg-primary/10 border border-primary/20">
+                    <div className="absolute top-1/2 -right-12 z-20 hidden -translate-y-1/2 lg:block">
+                      <div className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 bg-card shadow-[0_0_20px_var(--glow)]">
                         <ArrowRight className="h-4 w-4 text-primary" />
                       </div>
                     </div>
                   )}
                 </div>
+
+                {index < steps.length - 1 && (
+                  <div className="absolute -bottom-12 left-1/2 z-20 -translate-x-1/2 lg:hidden">
+                    <div className="flex h-8 w-8 items-center justify-center rounded-full border border-primary/30 bg-card shadow-[0_0_20px_var(--glow)]">
+                      <ArrowDown className="h-4 w-4 text-primary" />
+                    </div>
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>

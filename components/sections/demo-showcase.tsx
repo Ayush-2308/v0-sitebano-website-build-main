@@ -1,231 +1,270 @@
 "use client"
 
-import { motion } from "framer-motion"
-import { useInView } from "framer-motion"
-import { useRef, useState } from "react"
-import { ExternalLink, Star, Smartphone, Monitor, Utensils, Dumbbell, Scissors, Stethoscope, ShoppingBag } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils"
+import { motion, useInView } from "framer-motion"
+import Image from "next/image"
+import {
+  ArrowUpRight,
+  BedDouble,
+  Building2,
+  Dumbbell,
+  GraduationCap,
+  Scissors,
+  ShoppingBag,
+  Stethoscope,
+  Utensils,
+} from "lucide-react"
+import { useRef } from "react"
 
 const categories = [
-  { id: "all", label: "All", icon: null },
-  { id: "restaurant", label: "Restaurant", icon: Utensils },
-  { id: "gym", label: "Gym", icon: Dumbbell },
-  { id: "salon", label: "Salon", icon: Scissors },
-  { id: "clinic", label: "Clinic", icon: Stethoscope },
-  { id: "grocery", label: "Grocery", icon: ShoppingBag },
-]
+  { label: "Grocery Store", caption: "Orders & delivery", icon: ShoppingBag, side: "left", y: 70 },
+  { label: "Restaurant", caption: "Menu & reservations", icon: Utensils, side: "right", y: 70 },
+  { label: "Salon", caption: "Services & bookings", icon: Scissors, side: "left", y: 210 },
+  { label: "Gym", caption: "Plans & enquiries", icon: Dumbbell, side: "right", y: 210 },
+  { label: "Clinic", caption: "Care & appointments", icon: Stethoscope, side: "left", y: 350 },
+  { label: "Real Estate", caption: "Properties & leads", icon: Building2, side: "right", y: 350 },
+  { label: "Coaching Institute", caption: "Courses & admissions", icon: GraduationCap, side: "left", y: 490 },
+  { label: "Hotel & Guest House", caption: "Rooms & reservations", icon: BedDouble, side: "right", y: 490 },
+] as const
 
-const demos = [
-  {
-    id: 1,
-    category: "restaurant",
-    name: "Sharma Dhaba",
-    rating: 4.6,
-    reviews: 340,
-    gradient: "from-orange-500/30 via-red-500/20 to-yellow-500/30",
-    features: ["Online Menu", "WhatsApp Orders", "Google Maps"],
-  },
-  {
-    id: 2,
-    category: "gym",
-    name: "FitZone Gym",
-    rating: 4.5,
-    reviews: 128,
-    gradient: "from-blue-500/30 via-cyan-500/20 to-indigo-500/30",
-    features: ["Class Schedule", "Membership Plans", "Trainer Profiles"],
-  },
-  {
-    id: 3,
-    category: "salon",
-    name: "Glamour Beauty Studio",
-    rating: 4.8,
-    reviews: 256,
-    gradient: "from-pink-500/30 via-purple-500/20 to-rose-500/30",
-    features: ["Service Menu", "Book Appointment", "Gallery"],
-  },
-  {
-    id: 4,
-    category: "clinic",
-    name: "City Care Clinic",
-    rating: 4.7,
-    reviews: 412,
-    gradient: "from-teal-500/30 via-emerald-500/20 to-green-500/30",
-    features: ["Doctor Profiles", "Timings", "Services List"],
-  },
-  {
-    id: 5,
-    category: "grocery",
-    name: "Fresh Mart Store",
-    rating: 4.4,
-    reviews: 89,
-    gradient: "from-green-500/30 via-lime-500/20 to-emerald-500/30",
-    features: ["Product Catalog", "WhatsApp Order Form", "Delivery Info"],
-  },
-  {
-    id: 6,
-    category: "restaurant",
-    name: "Agra Biryani House",
-    rating: 4.7,
-    reviews: 520,
-    gradient: "from-amber-500/30 via-orange-500/20 to-red-500/30",
-    features: ["Full Menu", "Special Offers", "Table Booking"],
-  },
-]
+const connectionPaths = categories.map((category) => {
+  const endX = category.side === "left" ? 250 : 850
+  const controlX = category.side === "left" ? 435 : 665
+  const endY = category.y + 55
+  return `M550 315 C${controlX} 315 ${controlX} ${endY} ${endX} ${endY}`
+})
+
+function MindMapLogo({ compact = false }: { compact?: boolean }) {
+  return (
+    <div className="relative z-10 flex h-full w-full flex-col items-center justify-center text-center">
+      <Image
+        src="/images/sitebano-s-mark.png"
+        alt=""
+        width={512}
+        height={512}
+        priority
+        className={compact ? "h-14 w-14 object-contain" : "h-[74px] w-[74px] object-contain"}
+      />
+      <div className={compact ? "mt-0.5 text-xl font-semibold" : "mt-0.5 text-[28px] font-semibold leading-none"}>
+        <span className="text-foreground">Site</span>
+        <span className="text-primary">Bano</span>
+      </div>
+      <p className={compact ? "mt-1 text-[9px] font-semibold text-muted-foreground" : "mt-1.5 text-[10px] font-semibold text-muted-foreground"}>
+        Your Customers Are Online. <span className="text-primary">Are You?</span>
+      </p>
+    </div>
+  )
+}
 
 export function DemoShowcaseSection() {
-  const ref = useRef(null)
-  const isInView = useInView(ref, { once: true, margin: "-100px" })
-  const [activeCategory, setActiveCategory] = useState("all")
-
-  const filteredDemos = activeCategory === "all" 
-    ? demos 
-    : demos.filter(demo => demo.category === activeCategory)
+  const ref = useRef<HTMLElement>(null)
+  const isInView = useInView(ref, { once: false, margin: "-100px" })
 
   return (
-    <section id="portfolio" className="py-20 lg:py-32 bg-secondary/30" ref={ref}>
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Section Header */}
+    <section
+      id="portfolio"
+      ref={ref}
+      className="relative overflow-hidden bg-secondary/30 py-20 transition-colors duration-500 lg:py-28"
+    >
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,var(--glow),transparent_50%)] opacity-75" />
+
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
-          className="text-center mb-12"
+          className="mx-auto mb-10 max-w-3xl text-center"
         >
-          <span className="inline-block text-sm font-semibold text-primary uppercase tracking-wider mb-3">
-            Portfolio
+          <span className="mb-3 inline-block text-sm font-semibold uppercase tracking-wider text-primary">
+            What We Build
           </span>
-          <h2 className="text-3xl font-bold text-foreground sm:text-4xl lg:text-5xl text-balance">
-            Websites We Build for <span className="text-primary">Local Businesses</span>
+          <h2 className="text-balance text-3xl font-bold text-foreground sm:text-4xl lg:text-5xl">
+            Websites for Every{" "}
+            <span className="text-primary">Local Business.</span>
           </h2>
-          <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-            Industry-specific templates optimized for conversions. Each one designed 
-            to turn visitors into customers.
+          <p className="mx-auto mt-4 max-w-2xl text-pretty text-base text-muted-foreground sm:text-lg">
+            SiteBano builds focused digital experiences for the businesses people
+            search for every day.
           </p>
         </motion.div>
 
-        {/* Category Filter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex flex-wrap justify-center gap-2 mb-12"
-        >
-          {categories.map((category) => (
-            <button
-              key={category.id}
-              onClick={() => setActiveCategory(category.id)}
-              className={cn(
-                "inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all",
-                activeCategory === category.id
-                  ? "bg-primary text-primary-foreground"
-                  : "bg-card border border-border hover:border-primary/30 text-muted-foreground hover:text-foreground"
-              )}
-            >
-              {category.icon && <category.icon className="h-4 w-4" />}
-              {category.label}
-            </button>
-          ))}
-        </motion.div>
+        <div className="relative mx-auto hidden h-[630px] max-w-[1100px] lg:block">
+          <svg
+            aria-hidden="true"
+            viewBox="0 0 1100 630"
+            className="pointer-events-none absolute inset-0 h-full w-full overflow-visible"
+            preserveAspectRatio="none"
+          >
+            <defs>
+              <linearGradient id="map-line" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0%" stopColor="var(--border)" />
+                <stop offset="52%" stopColor="var(--primary)" />
+                <stop offset="100%" stopColor="var(--border)" />
+              </linearGradient>
+              <filter id="map-dot-glow">
+                <feGaussianBlur stdDeviation="3" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
 
-        {/* Demo Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredDemos.map((demo, index) => (
-            <motion.div
-              key={demo.id}
-              initial={{ opacity: 0, y: 30 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.5, delay: 0.2 + index * 0.1 }}
-              className="group"
-            >
-              <div className="relative overflow-hidden rounded-2xl bg-card border border-border/50 hover:border-primary/30 transition-all hover:shadow-xl">
-                {/* Preview Area */}
-                <div className={`relative h-48 bg-gradient-to-br ${demo.gradient} p-4`}>
-                  {/* Device Mockup */}
-                  <div className="absolute inset-4 bg-card/90 backdrop-blur-sm rounded-lg border border-border/50 p-3 flex flex-col">
-                    <div className="flex items-center gap-1.5 mb-2">
-                      <div className="h-2 w-2 rounded-full bg-red-400" />
-                      <div className="h-2 w-2 rounded-full bg-yellow-400" />
-                      <div className="h-2 w-2 rounded-full bg-green-400" />
-                      <div className="flex-1 mx-2 h-4 rounded bg-secondary" />
-                    </div>
-                    <div className="flex-1 rounded bg-gradient-to-b from-secondary/50 to-transparent" />
-                  </div>
+            {connectionPaths.map((path, index) => (
+              <g key={path}>
+                <motion.path
+                  d={path}
+                  fill="none"
+                  stroke="url(#map-line)"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  initial={{ pathLength: 0, opacity: 0 }}
+                  animate={
+                    isInView
+                      ? { pathLength: 1, opacity: 0.75 }
+                      : { pathLength: 0, opacity: 0 }
+                  }
+                  transition={{ duration: 0.8, delay: 0.12 + index * 0.07 }}
+                />
+                <motion.circle
+                  r="4"
+                  fill="var(--primary)"
+                  filter="url(#map-dot-glow)"
+                  initial={{ opacity: 0 }}
+                  animate={
+                    isInView
+                      ? { opacity: [0, 1, 1, 0], offsetDistance: ["0%", "100%"] }
+                      : { opacity: 0 }
+                  }
+                  style={{ offsetPath: `path("${path}")` }}
+                  transition={{
+                    duration: 2.7,
+                    delay: 0.9 + index * 0.28,
+                    repeat: Infinity,
+                    ease: "linear",
+                  }}
+                />
+              </g>
+            ))}
+          </svg>
 
-                  {/* Category Badge */}
-                  <div className="absolute top-2 right-2">
-                    <span className="inline-flex items-center gap-1 rounded-full bg-background/80 backdrop-blur-sm px-2.5 py-1 text-xs font-medium text-foreground capitalize">
-                      {demo.category}
-                    </span>
-                  </div>
-                </div>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={
+              isInView
+                ? { opacity: 1, scale: 1, y: [0, -6, 0] }
+                : { opacity: 0, scale: 0.8 }
+            }
+            transition={{
+              opacity: { duration: 0.5 },
+              scale: { duration: 0.5 },
+              y: { duration: 4.5, repeat: Infinity, ease: "easeInOut" },
+            }}
+            className="absolute left-1/2 top-[315px] z-20 h-44 w-56 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-lg border border-primary/40 bg-card shadow-[0_0_70px_var(--glow-strong)]"
+          >
+            <MindMapLogo />
+            <span className="pointer-events-none absolute inset-3 rounded-md border border-dashed border-primary/25" />
+          </motion.div>
 
-                {/* Content */}
-                <div className="p-5">
-                  <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h3 className="font-semibold text-foreground">{demo.name}</h3>
-                      <div className="flex items-center gap-2 mt-1">
-                        <div className="flex items-center gap-1">
-                          <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
-                          <span className="text-sm font-medium text-foreground">{demo.rating}</span>
-                        </div>
-                        <span className="text-xs text-muted-foreground">({demo.reviews} reviews)</span>
-                      </div>
-                    </div>
-                    <div className="flex gap-1.5">
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary">
-                        <Monitor className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                      <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-secondary">
-                        <Smartphone className="h-4 w-4 text-muted-foreground" />
-                      </div>
-                    </div>
-                  </div>
+          {categories.map((category, index) => {
+            const Icon = category.icon
+            const sideClass = category.side === "left" ? "left-0" : "right-0"
 
-                  {/* Features */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {demo.features.map((feature) => (
-                      <span
-                        key={feature}
-                        className="inline-flex items-center rounded-full bg-primary/5 border border-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary"
-                      >
-                        {feature}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Action */}
-                  <Button
-                    variant="outline"
-                    className="w-full group/btn hover:bg-primary hover:text-primary-foreground hover:border-primary"
-                    asChild
-                  >
-                    <a href="#contact">
-                      View Demo
-                      <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover/btn:translate-x-0.5" />
-                    </a>
-                  </Button>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+            return (
+              <motion.div
+                key={category.label}
+                initial={{ opacity: 0, scale: 0.88 }}
+                animate={
+                  isInView
+                    ? {
+                        opacity: 1,
+                        scale: 1,
+                        y: [0, index % 2 === 0 ? -5 : 5, 0],
+                      }
+                    : { opacity: 0, scale: 0.88 }
+                }
+                transition={{
+                  opacity: { duration: 0.4, delay: 0.3 + index * 0.07 },
+                  scale: { duration: 0.4, delay: 0.3 + index * 0.07 },
+                  y: {
+                    duration: 4 + index * 0.18,
+                    delay: index * 0.12,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  },
+                }}
+                whileHover={{ scale: 1.04, y: -4 }}
+                className={`absolute z-20 flex h-[110px] w-[250px] items-center gap-4 rounded-lg border border-border bg-card p-4 text-left shadow-lg transition-colors hover:border-primary/60 hover:shadow-[0_14px_35px_var(--glow)] ${sideClass}`}
+                style={{ top: category.y }}
+              >
+                <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg border border-primary/20 bg-primary/10 text-primary">
+                  <Icon className="h-6 w-6" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-semibold text-foreground">
+                    {category.label}
+                  </span>
+                  <span className="mt-1 block text-xs text-muted-foreground">
+                    {category.caption}
+                  </span>
+                </span>
+              </motion.div>
+            )
+          })}
         </div>
 
-        {/* Bottom Note */}
+        <div className="relative mx-auto mb-10 max-w-2xl lg:hidden">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={isInView ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.9 }}
+            className="relative z-10 mx-auto h-32 w-52 overflow-hidden rounded-lg border border-primary/40 bg-card shadow-[0_0_45px_var(--glow)]"
+          >
+            <MindMapLogo compact />
+          </motion.div>
+
+          <div className="absolute left-1/2 top-32 bottom-12 w-px -translate-x-1/2 bg-primary/35" />
+
+          <div className="relative mt-10 grid grid-cols-2 gap-x-6 gap-y-5 sm:gap-x-12">
+            {categories.map((category, index) => {
+              const Icon = category.icon
+              const isLeft = index % 2 === 0
+
+              return (
+                <motion.div
+                  key={category.label}
+                  initial={{ opacity: 0, x: isLeft ? -14 : 14 }}
+                  animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: isLeft ? -14 : 14 }}
+                  transition={{ delay: 0.18 + index * 0.07 }}
+                  className="relative flex min-h-28 flex-col items-center justify-center rounded-lg border border-border bg-card p-3 text-center shadow-md"
+                >
+                  <span
+                    className={`absolute top-1/2 h-px w-3 bg-primary/40 sm:w-6 ${
+                      isLeft ? "-right-3 sm:-right-6" : "-left-3 sm:-left-6"
+                    }`}
+                  />
+                  <span className="mb-2 flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <Icon className="h-5 w-5" />
+                  </span>
+                  <span className="text-sm font-semibold text-foreground">{category.label}</span>
+                  <span className="mt-1 text-[11px] text-muted-foreground">{category.caption}</span>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-12 text-center"
+          initial={{ opacity: 0, y: 16 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 16 }}
+          transition={{ duration: 0.45, delay: 0.7 }}
+          className="flex justify-center"
         >
-          <p className="text-muted-foreground">
-            Don&apos;t see your industry?{" "}
-            <a href="#contact" className="text-primary font-medium hover:underline">
-              Contact us
-            </a>{" "}
-            — we build custom websites for any local business.
-          </p>
+          <a
+            href="#contact-form"
+            className="inline-flex min-h-12 items-center justify-center gap-2 rounded-lg bg-primary px-8 text-sm font-semibold text-primary-foreground shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-[0_12px_30px_var(--glow-strong)]"
+          >
+            Discuss Your Website
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
         </motion.div>
       </div>
     </section>

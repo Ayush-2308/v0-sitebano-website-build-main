@@ -16,7 +16,7 @@ export function CTASection() {
     <section className="py-20 lg:py-32" ref={ref}>
       <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
+          initial={false}
           animate={isInView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.6 }}
           className="relative"
@@ -39,7 +39,7 @@ export function CTASection() {
 
               {/* Description */}
               <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto text-pretty">
-                Join businesses in Agra who are capturing more customers with 
+                Join businesses across India who are capturing more customers with
                 professional websites. See your free demo today.
               </p>
 

@@ -1,14 +1,21 @@
 import type { Metadata, Viewport } from 'next'
+import { Poppins } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import { ThemeProvider } from '@/components/theme-provider'
 import { FaviconSwitcher } from '@/components/favicon-switcher'
-import { SITEBANO_ASSETS } from '@/lib/sitebano-assets'
 import './globals.css'
+
+const poppins = Poppins({ 
+  subsets: ['latin'],
+  weight: ['300', '400', '500', '600', '700', '800'],
+  variable: '--font-poppins',
+  display: 'swap',
+})
 
 export const metadata: Metadata = {
   title: 'SiteBano | From Local to Digital - Premium Website Development',
-  description: 'SiteBano helps local businesses in Agra build powerful digital identities. Fast, mobile-optimized, SEO-ready websites delivered in 48-72 hours. Your Customers Are Online. Are You?',
-  keywords: ['website development', 'Agra', 'local business', 'digital marketing', 'web design', 'SiteBano', 'SEO', 'mobile website'],
+  description: 'SiteBano helps local businesses across India build powerful digital identities. Fast, mobile-optimized, SEO-ready websites delivered in 48-72 hours. Your Customers Are Online. Are You?',
+  keywords: ['website development', 'India', 'local business', 'digital marketing', 'web design', 'SiteBano', 'SEO', 'mobile website'],
   authors: [{ name: 'Ayush Gupta', url: 'https://sitebano.com' }],
   creator: 'SiteBano',
   openGraph: {
@@ -25,11 +32,8 @@ export const metadata: Metadata = {
     description: 'We Turn Google Ratings Into Real Websites. Premium website development for local businesses.',
   },
   icons: {
-    icon: [
-      { url: '/icon-light-32x32.png', media: '(prefers-color-scheme: light)' },
-      { url: '/icon-dark-32x32.png', media: '(prefers-color-scheme: dark)' },
-      { url: '/icon.svg', type: 'image/svg+xml' },
-    ],
+    icon: [{ url: '/sitebano-icon-dark-32.png?v=3', type: 'image/png', sizes: '32x32' }],
+    shortcut: '/sitebano-icon-dark-32.png?v=3',
     apple: '/apple-icon.png',
   },
 }
@@ -51,10 +55,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning className="bg-background">
-      <body className="font-sans antialiased">
+      <body className={`${poppins.className} font-sans antialiased`}>
         <ThemeProvider
           attribute="class"
-          defaultTheme="dark"
+          defaultTheme="system"
           enableSystem
           disableTransitionOnChange={false}
         >

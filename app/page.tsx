@@ -4,6 +4,7 @@ import { ProblemSolutionSection } from "@/components/sections/problem-solution"
 import { HowItWorksSection } from "@/components/sections/how-it-works"
 import { DemoShowcaseSection } from "@/components/sections/demo-showcase"
 import { PricingSection } from "@/components/sections/pricing"
+import { TestimonialsSection } from "@/components/sections/testimonials"
 import { WhyChooseSection } from "@/components/sections/why-choose"
 import { StatsSection } from "@/components/sections/stats"
 import { FounderSection } from "@/components/sections/founder"
@@ -24,6 +25,7 @@ export default function Home() {
         <HowItWorksSection />
         <DemoShowcaseSection />
         <PricingSection />
+        <TestimonialsSection />
         <WhyChooseSection />
         <StatsSection />
         <FounderSection />
